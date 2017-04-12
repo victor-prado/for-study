@@ -1,4 +1,7 @@
 import random
+from PriorityQueue import PriorityQueue
+from Vertex import Vertex
+
 
 def lcm(numbers):
 	"Return the least commom multiple of numbers's elements"
@@ -73,31 +76,47 @@ def print_graph(simple_graph):
 		print(str(num) + ' ' + str(n))
 		num += 1
 
+def get_adjacent(graph, vertix):
+	adj = []
+	for i in range(len(graph[vertex])):
+		if graph[vertix][i] != 0:
+			adj.append(i)
+	return adj
 
-class Node():
-	'''Node of a graph. Weight is a number, 
-	state can be anything, but could be usefull like a string'''
+def dijkstra(graph, source):
+	"Apply the Dijkstra algorithm"
 
-	def __init__(self, weight=1, state=None):
-		self.weight = weight
+	vertices = []
+	Q = PriorityQueue()
+	way = []
+
+	for v in range(len(graph)):
+		vertices.append(Vertex())
+		Q.add_with_priority(v, vertices[v].dist)
+
+	vertices[source] = Vertex(dist=0)
+	Q.decrease_priority(source, 0)
+
+	print(Q)
+
+	while len(Q) != 0:
+		u = Q.extract_min()
+		way.append(u)
+		for neighbor in get_adjacent(graph, u[1]):
+			alt = graph[u[1]][neighbor] + u.dist
+			print('a')
+			if (type(vetices[neighnor].dist) == str) or (int(vertices[neighborn].dist) > alt):
+				print('b')
+				vertices[neighbor].dist = alt
+				vertices[neighbor].prev = u
+				Q.decrease_priority(neighbor, alt)
+
+	return [v.dist for v in vertices]
 
 
-class Arc():
-	"Arc of a graph. Tail and head are nodes"
-
-	def __init__(self, tail, head, weight=1):
-		self.tail = tail
-		self.head = head
-		self.weight = weight
 
 
-
-class Simple_Graph():
-
-	def __init__(self, nodes, arcs):
-		self.nodes = nodes
-		self.arcs = arcs
-
-
-
-
+graph = build_graph(8)
+print_graph(graph)
+w = dijkstra(graph, 5)
+print(w)
