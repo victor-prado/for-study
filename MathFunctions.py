@@ -76,47 +76,43 @@ def print_graph(simple_graph):
 		print(str(num) + ' ' + str(n))
 		num += 1
 
-def get_adjacent(graph, vertix):
+def get_adjacent(graph, source):
 	adj = []
-	for i in range(len(graph[vertex])):
-		if graph[vertix][i] != 0:
+	for i in range(len(graph[source])):
+		if graph[source][i] != 0:
 			adj.append(i)
 	return adj
 
 def dijkstra(graph, source):
-	"Apply the Dijkstra algorithm"
+	'''Apply the Dijkstra algorithm and return the a list where
+	each position represents a vertice and its content represents 
+	the predecessor'''
 
-	vertices = []
-	Q = PriorityQueue()
-	way = []
+	vertices = [] #list of vertices
+	Q = PriorityQueue() #priority queue
 
+	#fills 'vertices' and 'Q', each vertex receive the distance iquals infinity
 	for v in range(len(graph)):
-		vertices.append(Vertex())
+		vertices.append(Vertex(v)) 
 		Q.add_with_priority(v, vertices[v].dist)
 
-	vertices[source] = Vertex(dist=0)
+	#the source vertex receive the distance zero
+	vertices[source] = Vertex(num=source, dist=0)
 	Q.decrease_priority(source, 0)
-
-	print(Q)
 
 	while len(Q) != 0:
 		u = Q.extract_min()
-		way.append(u)
-		for neighbor in get_adjacent(graph, u[1]):
-			alt = graph[u[1]][neighbor] + u.dist
-			print('a')
-			if (type(vetices[neighnor].dist) == str) or (int(vertices[neighborn].dist) > alt):
-				print('b')
+
+		for neighbor in get_adjacent(graph, u.num):
+			alt = graph[u.num][neighbor] + u.dist
+			Alt = Vertex(neighbor, alt)
+
+			if vertices[neighbor].greater_than(Alt):
 				vertices[neighbor].dist = alt
-				vertices[neighbor].prev = u
+				vertices[neighbor].prev = u.num
 				Q.decrease_priority(neighbor, alt)
 
-	return [v.dist for v in vertices]
+	return [v.prev for v in vertices]
 
 
 
-
-graph = build_graph(8)
-print_graph(graph)
-w = dijkstra(graph, 5)
-print(w)
